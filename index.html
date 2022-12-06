@@ -1,0 +1,72 @@
+<script>
+    logs = '<font color="lime">root@ubuntu</font>:<font color="cyan">~</font><font color="lime">$ </font>';
+    def = 0;
+    currentInput = "";
+
+    document.onkeydown = function(e) {
+	var keyCode = false;
+
+	if (e) event = e;
+
+	if (event) {
+		if (event.keyCode) {
+			keyCode = event.keyCode;
+		} else if (event.which) {
+			keyCode = event.which;
+		}
+	}
+    //alert(keyCode);
+    if(keyCode==13){
+        logs += "<font color='lime'>" + currentInput + "</font>";
+        logs += "<br><font color='lime'>" + execute(currentInput) + "</font>"
+        currentInput = "";
+        if(def==0){
+            logs += '<br><font color="lime">root@ubuntu</font>:<font color="cyan">~</font><font color="lime">$ </font>';
+        }else{
+            def = 1;
+            logs += '<font color="lime">root@ubuntu</font>:<font color="cyan">~</font><font color="lime">$ </font>';        
+        }
+        document.getElementById("console").innerHTML = logs;
+    }
+    if(keyCode==8){
+        currentInput = currentInput.slice(0,-1);
+
+        document.getElementById("console").innerHTML = logs + "<font color='lime'>" + currentInput + "</font>";  
+    }
+    var list = "1234567890qwertyuiopasdfghjklzxcvbnm .".split("");
+    var input = String.fromCharCode(keyCode).toString().toLowerCase();
+    if(keyCode==190){
+        input = ".";
+    }
+    if(list.includes(input)){
+        currentInput += input;
+        document.getElementById("console").innerHTML = logs + "<font color='lime'>" + currentInput + "</font>";
+    }
+    //alert(currentInput);
+};
+
+
+function execute(cmd){
+    args = cmd.split(" ");
+    if(args[0]=="ping"){
+        if(args.length == 2){
+            return "SENT 10KB DATA TO " + args[1] + " in 5 times.";
+        }
+        return "Correct Usage: ping target-ip"
+    }
+    if(args[0]=="echo"){
+        return cmd.replace("echo","");
+    }
+    if(args[0]=="chat"){
+        if(args.length>2){
+            return "[CHAT] Sent Message to " + args[1] + "<br>[CHAT] (BlackList+) This user black-listed you. so Your message is not shown! (AUTO-MESSAGE-REPLY-API v0.2.2)";
+        }
+        return "[CHAt] No Target Or No Message."
+    }
+    return "Unknown command type 'help'.";
+}
+
+</script>
+<div style="height: 100%; width: 100%;background: black;">
+    <p id="console"><font color="lime">root@ubuntu</font>:<font color="cyan">~</font><font color="lime">$ </font></p>
+</div>
